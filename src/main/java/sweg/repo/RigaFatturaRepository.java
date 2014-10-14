@@ -4,10 +4,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.transaction.annotation.Transactional;
 
-import sweg.entity.TestataFattura;
+import sweg.entity.RigaFattura;
 
-@RepositoryRestResource(collectionResourceRel = "fattura", path = "fattura")
+@RepositoryRestResource(path="rigaFattura", collectionResourceRel="rigaFattura")
 @Transactional
-public interface FatturaRepository extends CrudRepository<TestataFattura, Long> {
+public interface RigaFatturaRepository extends CrudRepository<RigaFattura, Long> {
 
 }
