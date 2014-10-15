@@ -1,5 +1,9 @@
     <div class="container" data-ng-controller="DetailCtrl" style="margin-top: 100px">
       <div class="row">
+      	<button type="button" class="btn btn-primary">Salva</button>
+		<button type="button" class="btn btn-danger">Elimina</button>
+      </div>
+      <div class="row">
         <div class="col-xs-6">
           <h1>
             <img src="img/sweg.png" style="width:80px; height: auto">
@@ -7,36 +11,28 @@
           </h1>
         </div>
         <div class="col-xs-6 text-right">
-          <h1>INVOICE</h1>
-          <h1><small>Invoice #001</small></h1>
+          <h1>Fattura</h1>
+          <h1><small>Fattura #{{}}</small></h1>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-5">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>From: <a href="#">Your Name</a></h4>
+              <h4>From:</h4>
             </div>
             <div class="panel-body">
-              <p>
-                Address <br>
-                details <br>
-                more <br>
-              </p>
+              <textarea class="form-control" rows="3"></textarea>
             </div>
           </div>
         </div>
         <div class="col-xs-5 col-xs-offset-2 text-right">
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h4>To : <a href="#">Client Name</a></h4>
+              <h4>To :</h4>
             </div>
             <div class="panel-body">
-              <p>
-                Address <br>
-                details <br>
-                more <br>
-              </p>
+              <textarea class="form-control" rows="3"></textarea>
             </div>
           </div>
         </div>
@@ -46,13 +42,13 @@
         <thead>
           <tr>
             <th>
-              <h4>Service</h4>
+              <h4># </h4>
             </th>
             <th>
-              <h4>Description</h4>
+              <h4>Descrizione</h4>
             </th>
             <th>
-              <h4>Hrs/Qty</h4>
+              <h4>Quantit&agrave;</h4>
             </th>
             <th>
               <h4>Rate/Price</h4>
@@ -73,6 +69,9 @@
         </tbody>
       </table>
       <div class="row text-right">
+        <div class="col-xs-4 col-xs-offset-8">
+       		<button type="button" class="btn btn-default btn-xs" data-ng-click="aggiungiRiga()">Aggiungi</button>
+       	</div>
         <div class="col-xs-2 col-xs-offset-8">
           <p>
             <strong>
