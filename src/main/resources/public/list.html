@@ -1,0 +1,20 @@
+    <div class="container" data-ng-controller="ListCtrl" style="margin-top: 100px">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>
+              <h4>Numero Fattura</h4>
+            </th>
+            <th>
+              <h4>Intestatario</h4>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-ng-repeat="f in fatture">
+            <td class="text-right" style="width:20%"><a href="#" ng-click="detail($index)">Fattura {{f.numero}}</a></td>
+            <td>{{f.intestatario}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
