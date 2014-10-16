@@ -15,14 +15,6 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-hal'])
 
 
 .controller('ListCtrl', function($scope, $resource, $location, halClient, $window) {
-	halClient.$post("/api/righe", null, {
-        "riga": 100,
-        "descrizione": "Riga 100",
-        "quantita": 0,
-        "prezzoUnitario": 10,
-        "iva": 22,
-        "testata": "http://localhost:8080/api/fattura/1"
-      });
 
 
     var a = halClient.$get('api').then( function( api ) {
@@ -35,68 +27,81 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-hal'])
     })
     ;
    
-//    $scope.detailPage = function(idx) {
+    $scope.detailPage = function(numero) {
 //        var id = $scope.fatture[idx].id;
-//        console.log(id);
-//        $location.path("/detail/"+id);
-//    }
+        console.log(numero);
+        $location.path("/detail/"+numero);
+    }
     
 })
 
 .controller('DetailCtrl', function($scope, $resource, halClient, $routeParams) {
-//	var id = $routeParams.id;
-
-//	var fattura = halClient.$get('fattura', {'id': id}).then(function(testata) {
-//		$scope.testata = testata;
-//		
-//		$scope.testata.$get('righe').then(function(righe) {
-//			return righe.$get('rigaFattura').then(function(righe) {
-//				$scope.righe = righe;
-//			});
-//		});
-//		
-//	});
-	var href = null;
 	
-	halClient.$get("api/rigaFattura").then(function(riga) {
-		href = riga.$href('self');
-	});
+	var load = function() {
+	//	var id = $routeParams.id;
 	
-	var a = halClient.$get('api').then( function( api ) {
-        api.$get('fattura').then(function (fattura) {
-        	return fattura.$get('fattura').then(function (fatture) {
-    			$scope.testata = fatture[0];
-    			console.log($scope.testata);
-
-    			$scope.testata.$get('righe').then(function(righe) {
-    				return righe.$get('rigaFattura').then(function(righe) {
-	    				console.log(righe);
-	    				$scope.righe = righe;
-    				});
-    			});
-        	});
-
-        });
-    })
-    ;
+	//	halClient.$get('fattura', {'id': id}).then(function(testata) {
+	//		$scope.fattura = fattura;
+	//		
+	//		$scope.testata.$get('righe').then(function(righe) {
+	//			return righe.$get('rigaFattura').then(function(righe) {
+	//				$scope.righe = righe;
+	//			});
+	//		});
+	//		
+	//	});
+	//	var href = null;
+		
+	//	halClient.$get("api/rigaFattura").then(function(riga) {
+	//		href = riga.$href('self');
+	//	});
+		
+		halClient.$get('api').then( function( api ) {
+	        api.$get('fatture').then(function (fattura) {
+	        	return fattura.$get('fatture').then(function (fatture) {
+	    			$scope.fattura = fatture[0];
+	    			$scope.fatturaCopy = angular.copy( fatture[0] );
+	
+	    			$scope.fattura.$get('righe').then(function(righe) {
+	    				return righe.$get('righe').then(function(righe) {
+		    				$scope.righe = righe;
+	    				});
+	    			});
+	        	});
+	
+	        });
+	    })
+	    ;
+	
+	}
 	
 	$scope.aggiungiRiga = function() {
-		$scope.righe.push({
-		      "riga" : 0,
-		      "descrizione" : "Riga 0",
-		      "quantita" : 0,
-		      "prezzoUnitario" : 10.00,
-		      "iva" : 22.00
-		      });
+		var n = $scope.righe.length;
+		var riga = {
+		      "riga" : n,
+		      "descrizione" : "Riga " + n,
+		      "quantita" : 10 * n,
+		      "prezzoUnitario" : 2.00 * n,
+		      "iva" : 22.00,
+		      "testata": $scope.fattura.$href('self')
+		      };
 		
-		halClient.createResource(href, {} , {
-		      "riga" : 0,
-		      "descrizione" : "Riga 0",
-		      "quantita" : 0,
-		      "prezzoUnitario" : 10.00,
-		      "iva" : 22.00
-		      })
+		$scope.righe.push(riga);
+		
+		halClient.$get("api").then( function( api ) {
+			api.$post("righe", null, riga);
+		});
+		
 	};
 
+	$scope.salva = function() {
+		$scope.fattura.$patch('self', null, $scope.fatturaCopy);
+	}
+	
+	$scope.elimina = function() {
+		$scope.fattura.$del('self').then(function (fattura) {load()});
+	}
+
+	load();
 })
 ;

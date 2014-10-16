@@ -97,5 +97,15 @@ public class RigaFattura {
 	public void setIva(BigDecimal iva) {
 		this.iva = iva;
 	}
+
+
+	public BigDecimal calcolaImponibile() {
+		return prezzoUnitario.multiply(new BigDecimal(quantita));
+	}
+
+
+	public BigDecimal calcolaIva() {
+		return prezzoUnitario.multiply(new BigDecimal(quantita)).multiply(iva.divide(new BigDecimal("100")));
+	}
 	
 }

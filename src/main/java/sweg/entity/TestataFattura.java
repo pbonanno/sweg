@@ -1,10 +1,12 @@
 package sweg.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,10 @@ import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class TestataFattura {
@@ -63,6 +69,8 @@ public class TestataFattura {
 		this.intestatario = intestatario;
 	}
 
+	@NotBlank
+	@Column(unique=true)
 	public String getNumero() {
 		return numero;
 	}
@@ -94,4 +102,27 @@ public class TestataFattura {
 		this.righe = righe;
 	}
 	
+	@Transient
+	public BigDecimal getTotaleImponibile() {
+		BigDecimal tot = BigDecimal.ZERO;
+		for (RigaFattura rigaFattura : righe) {
+			tot = tot.add(rigaFattura.calcolaImponibile());
+		}
+		return tot;
+	}
+
+	@Transient
+	public BigDecimal getTotaleIva() {
+		BigDecimal tot = BigDecimal.ZERO;
+		for (RigaFattura rigaFattura : righe) {
+			tot = tot.add(rigaFattura.calcolaIva());
+		}
+		return tot;
+	}
+	
+	@Transient
+	public BigDecimal getTotale() {
+		return getTotaleImponibile().add(getTotaleIva());
+	}
+
 }
