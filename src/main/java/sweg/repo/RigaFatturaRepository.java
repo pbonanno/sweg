@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import sweg.entity.RigaFattura;
 
-@RepositoryRestResource(path="rigaFattura", collectionResourceRel="rigaFattura")
+@RepositoryRestResource(path="righe", collectionResourceRel="righe")
 @Transactional
 public interface RigaFatturaRepository extends CrudRepository<RigaFattura, Long> {
 

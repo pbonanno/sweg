@@ -15,9 +15,19 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-hal'])
 
 
 .controller('ListCtrl', function($scope, $resource, $location, halClient, $window) {
+	halClient.$post("/api/righe", null, {
+        "riga": 100,
+        "descrizione": "Riga 100",
+        "quantita": 0,
+        "prezzoUnitario": 10,
+        "iva": 22,
+        "testata": "http://localhost:8080/api/fattura/1"
+      });
+
+
     var a = halClient.$get('api').then( function( api ) {
-        return api.$get('fattura').then(function (fattura) {
-            return fattura.$get('fattura').then(function (fatture) {
+        return api.$get('fatture').then(function (fattura) {
+            return fattura.$get('fatture').then(function (fatture) {
                 $scope.fatture = fatture;
             });
 

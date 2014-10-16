@@ -77,7 +77,7 @@ public class RigaFattura {
 		this.prezzoUnitario = prezzoUnitario;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	public TestataFattura getTestata() {
 		return testata;
 	}

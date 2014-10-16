@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import sweg.entity.RigaFattura;
 import sweg.entity.TestataFattura;
@@ -21,7 +22,7 @@ import sweg.repo.FatturaRepository;
 @ComponentScan
 @EnableAutoConfiguration
 @Import(RestMvcConfiguration.class)
-@EnableTransactionManagement
+@EnableJpaRepositories
 public class Application {
 	@Autowired
 	FatturaRepository fatturaRepository;
