@@ -35,20 +35,22 @@ public class Application {
     
     @PostConstruct
     public void init() {
-    	for (int i = 0; i < 50; i++) {
-			TestataFattura f = new TestataFattura(
-					"emittente "+i,
-					"intestatario "+i,
-					i+"/2014",
-					new Date()
-			);
-			
-			for (int j = 0; j < 5; j++) {
-				f.addRiga(new RigaFattura(j, "Riga "+j, j * 10, BigDecimal.TEN, new BigDecimal("22.0")));
+    	if (fatturaRepository.count() == 0) {
+	    	for (int i = 0; i < 50; i++) {
+				TestataFattura f = new TestataFattura(
+						"emittente "+i,
+						"intestatario "+i,
+						i+"/2014",
+						new Date()
+				);
 				
+				for (int j = 0; j < 5; j++) {
+					f.addRiga(new RigaFattura(j, "Riga "+j, j * 10, BigDecimal.TEN, new BigDecimal("22.0")));
+					
+				}
+				
+				fatturaRepository.save(f);
 			}
-			
-			fatturaRepository.save(f);
-		}
+    	}
     }
 }

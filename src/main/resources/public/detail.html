@@ -4,6 +4,7 @@
 	      <a class="navbar-brand" href="#">Azioni:</a>
 	   </div>
 	   <div>
+	      <button type="button" class="btn navbar-btn" data-ng-click="elenco()">&lt; Elenco</button>
 	      <button type="button" class="btn btn-primary navbar-btn" data-ng-click="salva()">Salva</button>
 	      <button type="button" class="btn btn-danger navbar-btn" data-ng-click="elimina()">Elimina</button>
 	   </div>
@@ -18,7 +19,7 @@
         </div>
         <div class="col-xs-6 text-right">
           <h1>Fattura</h1>
-          <h1><small>Fattura #{{fatturaCopy.numero}}</small></h1>
+          <h1><small>Fattura #{{testataCopy.numero}}</small></h1>
         </div>
       </div>
       <div class="row">
@@ -28,7 +29,7 @@
               <h4>From:</h4>
             </div>
             <div class="panel-body">
-              <textarea class="form-control" rows="3" data-ng-model="fatturaCopy.emittente"></textarea>
+              <textarea class="form-control" rows="3" data-ng-model="testataCopy.emittente"></textarea>
             </div>
           </div>
         </div>
@@ -38,7 +39,7 @@
               <h4>To :</h4>
             </div>
             <div class="panel-body">
-              <textarea class="form-control" rows="3" data-ng-model="fatturaCopy.intestatario"></textarea>
+              <textarea class="form-control" rows="3" data-ng-model="testataCopy.intestatario"></textarea>
             </div>
           </div>
         </div>
@@ -89,9 +90,9 @@
         </div>
         <div class="col-xs-2">
           <strong>
-          &euro; {{fatturaCopy.totaleImponibile}} <br>
-          &euro; {{fatturaCopy.totaleIva}} <br>
-          &euro; {{fatturaCopy.totale}} <br>
+          &euro; {{testataCopy.totaleImponibile}} <br>
+          &euro; {{testataCopy.totaleIva}} <br>
+          &euro; {{testataCopy.totale}} <br>
           </strong>
         </div>
       </div>

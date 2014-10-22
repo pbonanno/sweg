@@ -1,4 +1,15 @@
     <div class="container" data-ng-controller="ListCtrl" style="margin-top: 100px">
+	<nav class="navbar navbar-default" role="navigation">
+	   <div>
+	      <a data-ng-href="#/?page={{prev}}" class="btn navbar-btn" >&lt; Indietro</a>
+	      <a data-ng-href="#/?page={{next}}" class="btn navbar-btn"> Avanti &gt;</a>
+	   </div>
+<!-- 	   <div> -->
+<!-- 	      <a data-ng-href="#" class="btn navbar-btn" data-ng-click="indietro()">&lt; Indietro</a> -->
+<!-- 	      <a data-ng-href="#" class="btn navbar-btn" data-ng-click="avanti()"> Avanti &gt;</a> -->
+<!-- 	   </div> -->
+	</nav>
+
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -12,7 +23,7 @@
         </thead>
         <tbody>
           <tr data-ng-repeat="f in fatture">
-            <td class="text-right" style="width:20%"><a href="#" ng-click="detailPage(f.numero)">Fattura {{f.numero}}</a></td>
+            <td class="text-right" style="width:20%"><a ng-href="#/detail/{{f.numero}}">Fattura {{f.numero}}</a></td>
             <td>{{f.intestatario}}</td>
           </tr>
         </tbody>

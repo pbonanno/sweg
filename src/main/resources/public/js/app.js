@@ -4,7 +4,7 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-hal'])
 		$routeProvider
             .when('/', {
 			     templateUrl: 'list.html'
-		    }).when('/detail', {
+		    }).when('/detail/:num*', {
 			     templateUrl: 'detail.html'
 		    })
 		    .otherwise({
@@ -12,69 +12,71 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-hal'])
 		    });
 })
 
-
-
 .controller('ListCtrl', function($scope, $resource, $location, halClient, $window) {
-
-
-    var a = halClient.$get('api').then( function( api ) {
-        return api.$get('fatture').then(function (fattura) {
+	$scope.pagination = $location.search();
+	if (!$scope.pagination.page)
+		$scope.pagination.page = 0 ;
+	
+	if (!$scope.pagination.size)
+		$scope.pagination.size = 10 ;
+	
+	$scope.next = parseInt($scope.pagination.page) +1;
+	$scope.prev = parseInt($scope.pagination.page) -1;
+	
+	console.log($scope.prev);
+	console.log($scope.next);
+	
+    halClient.$get('api').then( function( api ) {
+        return api.$get('fatture', $scope.pagination).then(function (fattura) {
+            
+        	// Potrei usare questo
+        	$scope.nextUrl = fattura.$href('next');
+            
             return fattura.$get('fatture').then(function (fatture) {
                 $scope.fatture = fatture;
+                
             });
 
         });
     })
     ;
    
-    $scope.detailPage = function(numero) {
-//        var id = $scope.fatture[idx].id;
-        console.log(numero);
-        $location.path("/detail/"+numero);
-    }
+//    $scope.avanti = function() {
+//    	if ($scope.nextUrl)
+//            return halClient.$get($scope.nextUrl).then(function (fattura) {
+//                
+//            	// Potrei usare questo
+//            	$scope.nextUrl = fattura.$href('next');
+//                
+//                return fattura.$get('fatture').then(function (fatture) {
+//                    $scope.fatture = fatture;
+//                    
+//                });
+//
+//            });
+//    };
     
+
 })
 
-.controller('DetailCtrl', function($scope, $resource, halClient, $routeParams) {
-	
+.controller('DetailCtrl', function($scope, $resource, halClient, $routeParams, $location) {
 	var load = function() {
-	//	var id = $routeParams.id;
 	
-	//	halClient.$get('fattura', {'id': id}).then(function(testata) {
-	//		$scope.fattura = fattura;
-	//		
-	//		$scope.testata.$get('righe').then(function(righe) {
-	//			return righe.$get('rigaFattura').then(function(righe) {
-	//				$scope.righe = righe;
-	//			});
-	//		});
-	//		
-	//	});
-	//	var href = null;
+		halClient.$get("api/fatture/search/findByNumero?numero=" + $routeParams.num).then(function(testata) {
+			return testata.$get("fatture").then(function(fatture) {
+				$scope.testata = fatture[0];
+				$scope.testataCopy = angular.copy( $scope.testata );
+				
+				return $scope.testata.$get('righe').then(function(righe) {
+					return righe.$get('righe').then(function(righe) {
+						$scope.righe = righe;
+					});
+				});
+			});
+		});
+	};
 		
-	//	halClient.$get("api/rigaFattura").then(function(riga) {
-	//		href = riga.$href('self');
-	//	});
 		
-		halClient.$get('api').then( function( api ) {
-	        api.$get('fatture').then(function (fattura) {
-	        	return fattura.$get('fatture').then(function (fatture) {
-	    			$scope.fattura = fatture[0];
-	    			$scope.fatturaCopy = angular.copy( fatture[0] );
-	
-	    			$scope.fattura.$get('righe').then(function(righe) {
-	    				return righe.$get('righe').then(function(righe) {
-		    				$scope.righe = righe;
-	    				});
-	    			});
-	        	});
-	
-	        });
-	    })
-	    ;
-	
-	}
-	
 	$scope.aggiungiRiga = function() {
 		var n = $scope.righe.length;
 		var riga = {
@@ -83,7 +85,7 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-hal'])
 		      "quantita" : 10 * n,
 		      "prezzoUnitario" : 2.00 * n,
 		      "iva" : 22.00,
-		      "testata": $scope.fattura.$href('self')
+		      "testata": $scope.testata.$href('self')
 		      };
 		
 		$scope.righe.push(riga);
@@ -95,13 +97,17 @@ angular.module('app', ['ngRoute', 'ngResource', 'angular-hal'])
 	};
 
 	$scope.salva = function() {
-		$scope.fattura.$patch('self', null, $scope.fatturaCopy);
+		$scope.testata.$patch('self', null, $scope.testataCopy);
 	}
 	
 	$scope.elimina = function() {
-		$scope.fattura.$del('self').then(function (fattura) {load()});
+		$scope.testata.$del('self').then(function (fattura) {$scope.elenco();});
 	}
-
+	
+	$scope.elenco = function() {
+		$location.path("/");
+	}
+	
 	load();
 })
 ;
